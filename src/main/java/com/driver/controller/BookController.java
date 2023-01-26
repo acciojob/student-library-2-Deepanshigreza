@@ -18,8 +18,8 @@ public class BookController {
 
 @Autowired
     BookService bookService;
-    @Autowired
-    private AuthorRepository authorRepository;
+
+
     //Write createBook API with required annotations
 
     @PostMapping("/createBook")
