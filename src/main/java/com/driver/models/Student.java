@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table
 public class Student {
     public int getId() {
         return id;
@@ -115,4 +116,13 @@ public class Student {
     }
 
 
+    public Student(String emailId, String name, int age, String country, Card card, Date createdOn, Date updatedOn) {
+        this.emailId = emailId;
+        this.name = name;
+        this.age = age;
+        this.country = country;
+        this.card = card;
+        this.createdOn = createdOn;
+        this.updatedOn = updatedOn;
+    }
 }

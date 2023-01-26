@@ -83,5 +83,13 @@ public class Card {
     public void setBooks(List<Book> books) {
         this.books = books;
     }
+
+    public Card(Student student, Date createdOn, Date updatedOn, CardStatus cardStatus, List<Book> books) {
+        this.student = student;
+        this.createdOn = createdOn;
+        this.updatedOn = updatedOn;
+        this.cardStatus = cardStatus;
+        this.books = books;
+    }
 }
 
