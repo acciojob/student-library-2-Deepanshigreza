@@ -35,59 +35,101 @@ public class TransactionService {
 
     public String issueBook(int cardId, int bookId) throws Exception {
         //check whether bookId and cardId already exist
-        Book book=bookRepository5.findById(bookId).get();
-        Card card=cardRepository5.findById(cardId).get();
+//        Book book=bookRepository5.findById(bookId).get();
+//        Card card=cardRepository5.findById(cardId).get();
+//
+//        //conditions required for successful transaction of issue book:
+//        //1. book is present and available
+//        Transaction transaction=new Transaction();
+//
+//        //Note that the error message should match exactly in all cases
+//        transaction.setBook(book);
+//        transaction.setCard(card);
+//        transaction.setIssueOperation(true);
+//// If it fails: throw new Exception("Book is either unavailable or not present");
+//if(book==null || !book.isAvailable()){
+//    transaction.setTransactionStatus(TransactionStatus.FAILED);
+//    transactionRepository5.save(transaction);
+//    throw new Exception("Book is either unavailable or not present");
+//}
+////2. card is present and activated
+//        // If it fails: throw new Exception("Card is invalid");
+//if(card== null || card.getCardStatus().equals(CardStatus.DEACTIVATED)){
+//    transaction.setTransactionStatus(TransactionStatus.FAILED);
+//    transactionRepository5.save(transaction);
+//        throw new Exception("Card is invalid");}
+//        //3. number of books issued against the card is strictly less than max_allowed_books
+//        // If it fails: throw new Exception("Book limit has reached for this card");
+//        //If the transaction is successful, save the transaction to the list of transactions and return the id
+//if(card.getBooks().size()>=max_allowed_books){
+//    transaction.setTransactionStatus(TransactionStatus.FAILED);
+//    transactionRepository5.save(transaction);
+//    throw new Exception("Book limit has reached for this card");
+//}
+////bidirectional mapping
+//book.setCard(card);
+//book.setAvailable(false);
+//List<Book> booklist=card.getBooks();
+//booklist.add(book);
+//
+//card.setBooks(booklist);
+//cardRepository5.save(card);
+//bookRepository5.updateBook(book);
+//
+//
+//transaction.setTransactionStatus(TransactionStatus.SUCCESSFUL);
+//
+//transactionRepository5.save(transaction);
+        Card card = cardRepository5.findById(cardId).get();
+        Book book = bookRepository5.findById(bookId).get();
+
+        Transaction transaction = new Transaction();
+        transaction.setCard(card);
+        transaction.setBook(book);
+        transaction.setIssueOperation(true);
 
         //conditions required for successful transaction of issue book:
         //1. book is present and available
-        Transaction transaction=new Transaction();
+        // If it fails: throw new Exception("Book is either unavailable or not present");
+        if(book == null || !book.isAvailable()){
+            transaction.setTransactionStatus(TransactionStatus.FAILED);
+            transactionRepository5.save(transaction);
+            throw new Exception("Book is either unavailable or not present");
+        }
 
-
-
-
-
-        //Note that the error message should match exactly in all cases
-transaction.setBook(book);
-transaction.setCard(card);
-transaction.setIssueOperation(true);
-// If it fails: throw new Exception("Book is either unavailable or not present");
-if(book==null || !book.isAvailable()){
-    transaction.setTransactionStatus(TransactionStatus.FAILED);
-    transactionRepository5.save(transaction);
-    throw new Exception("Book is either unavailable or not present");
-}
-//2. card is present and activated
+        //2. card is present and activated
         // If it fails: throw new Exception("Card is invalid");
-if(card== null || card.getCardStatus().equals(CardStatus.DEACTIVATED)){
-    transaction.setTransactionStatus(TransactionStatus.FAILED);
-    transactionRepository5.save(transaction);
-        throw new Exception("Card is invalid");}
+        if(card == null || card.getCardStatus().equals(CardStatus.DEACTIVATED)){
+            transaction.setTransactionStatus(TransactionStatus.FAILED);
+            transactionRepository5.save(transaction);
+            throw new Exception("Card is invalid");
+        }
         //3. number of books issued against the card is strictly less than max_allowed_books
         // If it fails: throw new Exception("Book limit has reached for this card");
+        if(card.getBooks().size() >= max_allowed_books){
+            transaction.setTransactionStatus(TransactionStatus.FAILED);
+            transactionRepository5.save(transaction);
+            throw new Exception("Book limit has reached for this card");
+        }
         //If the transaction is successful, save the transaction to the list of transactions and return the id
-if(card.getBooks().size()>=max_allowed_books){
-    transaction.setTransactionStatus(TransactionStatus.FAILED);
-    transactionRepository5.save(transaction);
-    throw new Exception("Book limit has reached for this card");
-}
-//bidirectional mapping
-book.setCard(card);
-book.setAvailable(false);
-List<Book> booklist=card.getBooks();
-booklist.add(book);
+        book.setCard(card);
+        book.setAvailable(false);
+        List<Book> bookList = card.getBooks();
+        bookList.add(book);
+        card.setBooks(bookList);
 
-card.setBooks(booklist);
-cardRepository5.save(card);
-bookRepository5.updateBook(book);
+        cardRepository5.save(card);
+        bookRepository5.updateBook(book);
+        transaction.setTransactionStatus(TransactionStatus.SUCCESSFUL);
 
+        transactionRepository5.save(transaction);
+        //Note that the error message should match exactly in all cases
 
-transaction.setTransactionStatus(TransactionStatus.SUCCESSFUL);
-
-transactionRepository5.save(transaction);
+        return transaction.getTransactionId(); //return transactionId instead
 
 
 
-       return transaction.getTransactionId(); //return transactionId instead
+
     }
 
     public Transaction returnBook(int cardId, int bookId) throws Exception{
