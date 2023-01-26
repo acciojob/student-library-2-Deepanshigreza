@@ -4,6 +4,7 @@ import com.driver.models.Student;
 import com.driver.repositories.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Service
 public class StudentService {
@@ -27,15 +28,19 @@ public class StudentService {
         return student;
     }
 
-    public void createStudent(Student student){
 
+    public void createStudent(Student student){
+        studentRepository4.save(student);
     }
 
     public void updateStudent(Student student){
+        int id=student.getId();
+Student student1=studentRepository4.findById(id).get();
 
     }
 
     public void deleteStudent(int id){
         //Delete student and deactivate corresponding card
+
     }
 }
