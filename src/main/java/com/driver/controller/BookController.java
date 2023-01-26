@@ -1,6 +1,7 @@
 package com.driver.controller;
 
 import com.driver.models.Book;
+import com.driver.repositories.AuthorRepository;
 import com.driver.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,8 @@ public class BookController {
 
 @Autowired
     BookService bookService;
+    @Autowired
+    private AuthorRepository authorRepository;
     //Write createBook API with required annotations
 
     @PostMapping("/createBook")
@@ -31,10 +34,11 @@ public class BookController {
                                    @RequestParam(value = "available", required = false, defaultValue = "false") boolean available,
                                    @RequestParam(value = "author", required = false) String author){
 
-        List<Book> bookList = null; //find the elements of the list by yourself
+        List<Book> bookList = bookService.getBooks(genre,available,author); //find the elements of the list by yourself
 
         return new ResponseEntity<>(bookList, HttpStatus.OK);
 
     }
+
 
 }

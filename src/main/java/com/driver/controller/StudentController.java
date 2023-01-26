@@ -18,12 +18,13 @@ public class StudentController {
 
     //Add required annotations
     public ResponseEntity getStudentByEmail(@RequestParam("email") String email){
+        studentService.getDetailsByEmail(email);
         return new ResponseEntity<>("Student details printed successfully ", HttpStatus.OK);
     }
 
     //Add required annotations
     public ResponseEntity getStudentById(@RequestParam("id") int id){
-
+studentService.getDetailsById(id);
         return new ResponseEntity<>("Student details printed successfully ", HttpStatus.OK);
     }
 @PostMapping("/createStudent")
