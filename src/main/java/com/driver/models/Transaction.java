@@ -29,6 +29,8 @@ public class Transaction {
 
     private int fineAmount;
 
+
+
     @Column(columnDefinition = "TINYINT(1)")
     private boolean isIssueOperation;
 
